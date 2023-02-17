@@ -1,0 +1,11 @@
+USER     = "Emericdefay"
+REPO     = "dumb-app"
+TAG_FRONT= ""
+TAG_BACK = ""
+APP_NAME = "main"
+UPT_NAME = "update"
+DEBUG    = True
+UPD_COLOR= (150, 0, 20)
+UPD_HEX_C= "#%02x%02x%02x" % UPD_COLOR
+WIDTH    = 300
+HEIGHT   = 100

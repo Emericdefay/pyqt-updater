@@ -1,0 +1,8 @@
+# Environnement
+env
+
+# Python caches
+__pycache__
+
+# dist
+main.exe
