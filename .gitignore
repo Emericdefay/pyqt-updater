@@ -1,8 +1,12 @@
 # Environnement
 env
 
-# Python caches
+# Caches
 __pycache__
 
-# dist
+# Dist
 main.exe
+build/
+dist/
+
+# Debug

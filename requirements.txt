@@ -1,5 +1,10 @@
+# App
 
+# Debug
 
-# updater
+# Launcher
+pywin32
+
+# Updater
 requests
 tqdm
