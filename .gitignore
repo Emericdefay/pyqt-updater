@@ -4,6 +4,9 @@ env
 # Caches
 __pycache__
 
+# Logs
+*.log
+
 # Dist
 main.exe
 build/
