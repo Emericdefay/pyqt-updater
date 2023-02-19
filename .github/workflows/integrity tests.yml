@@ -64,7 +64,7 @@ jobs:
 
     - name: Run pyinstaller for launcher
       run: |
-        pyinstaller --oneline launcher.py
+        pyinstaller --onefile launcher.py
         
     - uses: actions/upload-artifact@v2
       with:
@@ -73,7 +73,7 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        pyinstaller --oneline ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
+        pyinstaller --onefile ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
 
     - uses: actions/upload-artifact@v2
       with:
