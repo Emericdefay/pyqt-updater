@@ -59,7 +59,7 @@ jobs:
 
     - name: Run pyinstaller for launcher
       run: |
-        pyinstaller --name launcher.exe --onefile ./app/launcher.spec
+        pyinstaller --name launcher.exe --onefile ./app/launcher.py
     - uses: actions/upload-artifact@v2
       with:
         name: launcher.exe
@@ -67,7 +67,7 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        pyinstaller --name ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.spec
+        pyinstaller --name ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
@@ -85,7 +85,7 @@ jobs:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: ./dist/launcher.exe
         asset_name: launcher.exe
-        asset_content_type: application/zip
+        asset_content_type: application/exe
 
     - name: Upload asset ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
@@ -96,4 +96,4 @@ jobs:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
-        asset_content_type: application/zip
+        asset_content_type: application/exe
