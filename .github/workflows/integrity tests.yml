@@ -60,22 +60,20 @@ jobs:
     - name: Run pyinstaller for launcher
       run: |
         pyinstaller --onefile ./app/launcher.py
-        
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
-        path: dist/launcher.exe
+        name: launcher.exe
+        path: dist/app/launcher.exe
         
     - name: Run pyinstaller for app
       run: |
         pyinstaller --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
-
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
-        path: dist/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
+        path: dist/app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
 
-    - name: Upload asset
+    - name: Upload asset launcher
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-release-asset@v1
       env:
@@ -86,7 +84,7 @@ jobs:
         asset_name: launcher.exe
         asset_content_type: application/zip
 
-    - name: Upload asset
+    - name: Upload asset ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-release-asset@v1
       env:
