@@ -28,7 +28,11 @@ jobs:
       run: ls
     - name: Test with unittest
       run: |
+        cd app
         python -m unittest .\launcher.py
+        cd ..
+    - name: LS
+      run: ls
 
     - name: PyInstaller
       run: |
