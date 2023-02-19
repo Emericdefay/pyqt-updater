@@ -38,9 +38,9 @@ jobs:
     - name: Increment version
       run: |
         # Vérifier si une mise à jour est disponible
-        VERSION_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_HEAD_REF}/version.txt"
-        echo VERSION =$(curl -s "${VERSION_URL}")
-
+        VERSION_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/version.txt"
+        echo VERSION = $(curl -s "${VERSION_URL}")
+https://raw.githubusercontent.com/Emericdefay/pyqt-updater/version.txt
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/create-release@v1
