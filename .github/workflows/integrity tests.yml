@@ -31,21 +31,19 @@ jobs:
     - name: PyInstaller
       run: |
         pip install pyinstaller
-        pyinstaller --name myapp --onefile main.py
+        pyinstaller --name app --onefile launcher.py
 
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      uses: actions/create-release@v1.0.4
+      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.0.${{ github.run_number }}
-        release_name: Release v1.0.${{ github.run_number }}
+        tag_name: 1.0.${{ github.ref }}
+        release_name: Release v1.0.${{ github.ref }}
         body: |
           Changes in this Release:
           - Added new feature A
           - Fixed Bug B
         draft: false
         prerelease: false
-        files: |
-          ./dist/myapp
