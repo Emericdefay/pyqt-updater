@@ -36,6 +36,27 @@ jobs:
         pip install pyinstaller
         pyinstaller --name app --onefile launcher.py
 
+    - name: Increment version
+      run: |
+        # Vérifier si une mise à jour est disponible
+        VERSION_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_BASE_REF}/version.txt"
+        VERSION=$(curl -s "${VERSION_URL}")
+        echo $VERSION
+        # Chaîne de caractères initiale
+        VERSION="1.2.3"
+
+        # Récupérer la dernière partie de la chaîne (séparée par un point)
+        LAST_PART=$(echo $VERSION | awk -F. '{print $NF}')
+
+        # Incrémenter la dernière partie de 1
+        NEW_LAST_PART=$(($LAST_PART + 1))
+
+        # Remplacer la dernière partie de la chaîne par la nouvelle valeur incrémentée
+        NEW_VERSION=$(echo $VERSION | sed "s/\.[0-9]*$/.${NEW_LAST_PART}/")
+
+        echo "Version initiale : $VERSION"
+        echo "Nouvelle version : $NEW_VERSION"
+
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/create-release@v1
@@ -46,7 +67,6 @@ jobs:
         release_name: Release v1.0.${{ github.ref }}
         body: |
           Changes in this Release:
-          - Added new feature A
-          - Fixed Bug B
+          ${{ github.event.head_commit.message }}
         draft: false
         prerelease: false
