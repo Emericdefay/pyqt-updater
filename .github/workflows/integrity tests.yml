@@ -39,7 +39,7 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         VERSION_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_HEAD_REF}/version.txt"
-        ${ VERSION } =$(curl -s "${VERSION_URL}")
+        echo VERSION =$(curl -s "${VERSION_URL}")
 
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -47,8 +47,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: 1.0.${ VERSION }
-        release_name: Release v1.0.${ VERSION }
+        tag_name: 1.0.${{ VERSION }}
+        release_name: Release v1.0.${{ VERSION }}
         body: |
           Changes in this Release:
           ${{ github.event.head_commit.message }}
