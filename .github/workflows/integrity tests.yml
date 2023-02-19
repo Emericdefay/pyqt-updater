@@ -26,13 +26,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r wrkflw_reqs.txt
 
-    - name: LS
-      run: ls
     - name: Test with unittest
       run: |
         python -m unittest ./app/launcher.py
-    - name: LS
-      run: ls
 
     - name: PyInstaller
       run: |
@@ -43,7 +39,7 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         VERSION_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_HEAD_REF}/version.txt"
-        env.VERSION=$(curl -s "${VERSION_URL}")
+        ${ env.VERSION } =$(curl -s "${VERSION_URL}")
 
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
