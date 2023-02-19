@@ -37,6 +37,9 @@ setup_logs()
 my_queue = queue.Queue()
 
 
+def get_app_name():
+    return APP_NAME
+
 @log_exceptions
 def load_json() -> Any:
     with open(f"{UPT_PATH}") as f_json:

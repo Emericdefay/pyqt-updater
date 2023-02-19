@@ -41,6 +41,12 @@ jobs:
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
 
+    - name: Get App Name
+      id: app_name_from_launcher
+      run: |
+        # Get app name from launcher.py 
+        echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
+
     - name: Create Release
       id: create-release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -66,6 +72,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: ./dist/app
+        asset_path: ./dist/app/launcher.py
         asset_name: launcher.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload asset
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./dist/app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
+        asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         asset_content_type: application/octet-stream
