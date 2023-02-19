@@ -39,7 +39,6 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         VERSION=$(cat version.txt)
-        echo $VERSION
 
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -47,8 +46,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${ VERSION }
-        release_name: Release ${ VERSION }
+        tag_name: ${ env.VERSION }
+        release_name: Release ${ env.VERSION }
         body: |
           Changes in this Release:
           ${{ github.event.head_commit.message }}
