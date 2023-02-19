@@ -59,18 +59,18 @@ jobs:
 
     - name: Run pyinstaller for launcher
       run: |
-        pyinstaller --onefile ./app/launcher.py
+        pyinstaller --name launcher.exe --onefile ./app/launcher.py
     - uses: actions/upload-artifact@v2
       with:
-        name: launcher
+        name: launcher.exe
         path: ./dist/
         
     - name: Run pyinstaller for app
       run: |
-        pyinstaller --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
+        pyinstaller --name ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
+        name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         path: ./dist/
 
     - name: ls
@@ -84,7 +84,7 @@ jobs:
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: ./dist/
-        asset_name: launcher
+        asset_name: launcher.exe
         asset_content_type: application/zip
 
     - name: Upload asset ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
@@ -95,5 +95,5 @@ jobs:
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: ./dist/
-        asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
+        asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         asset_content_type: application/zip
