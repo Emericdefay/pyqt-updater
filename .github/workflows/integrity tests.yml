@@ -67,7 +67,7 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        python PyInstaller ${{ steps.app_name_from_launcher.outputs.APP_NAME }}.spec
+        python -m PyInstaller ${{ steps.app_name_from_launcher.outputs.APP_NAME }}.spec
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.app_name_from_launcher.outputs.APP_NAME }}
