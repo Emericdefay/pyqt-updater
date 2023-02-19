@@ -1,0 +1,13 @@
+# App
+
+# Debug
+
+# Launcher
+#pywin32
+
+# Updater
+requests
+tqdm
+
+# Build
+pyinstaller
