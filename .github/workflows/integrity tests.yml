@@ -43,7 +43,7 @@ jobs:
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
     - name: Create Release
-      id: create-release
+      id: create_release
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
       uses: actions/create-release@v1
       env:
@@ -59,19 +59,19 @@ jobs:
 
     - name: Run pyinstaller for launcher
       run: |
-        pyinstaller --name launcher.exe --onefile ./app/launcher.py
+        python -m PyInstaller  ./app/launcher.spec
     - uses: actions/upload-artifact@v2
       with:
-        name: launcher.exe
-        path: ./dist/
+        name: launcher
+        path: ./dist/launcher.exe
         
     - name: Run pyinstaller for app
       run: |
-        pyinstaller --name ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
+        python PyInstaller ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.spec
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
-        path: ./dist/
+        name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
+        path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
 
     - name: ls
       run: ls ./dist/
@@ -85,7 +85,7 @@ jobs:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: ./dist/launcher.exe
         asset_name: launcher.exe
-        asset_content_type: application/exe
+        asset_content_type: application/zip
 
     - name: Upload asset ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
@@ -96,4 +96,4 @@ jobs:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
-        asset_content_type: application/exe
+        asset_content_type: application/zip
