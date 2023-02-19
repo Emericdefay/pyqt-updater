@@ -1,5 +1,6 @@
 from typing import Any
 import os
+import sys
 import re
 import json
 import subprocess
@@ -9,13 +10,27 @@ import requests
 import logging
 import unittest
 
-from updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
-from updater.paths import APP_PATH, UPT_PATH
-from updater.spinner import DownloadProgressBar
-from updater.dialog import dialog_error
-from updater.tests.test_integrity import TestUpdateJson
+try:
 
-from dbg.logs import setup_logs, log_exceptions
+    from updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
+    from updater.paths import APP_PATH, UPT_PATH
+    from updater.spinner import DownloadProgressBar
+    from updater.dialog import dialog_error
+    from updater.tests.test_integrity import TestUpdateJson
+
+    from dbg.logs import setup_logs, log_exceptions
+
+except ModuleNotFoundError:
+    sys.path.append(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
+    )
+    from app.updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
+    from app.updater.paths import APP_PATH, UPT_PATH
+    from app.updater.spinner import DownloadProgressBar
+    from app.updater.dialog import dialog_error
+    from app.updater.tests.test_integrity import TestUpdateJson
+
+    from app.dbg.logs import setup_logs, log_exceptions
 
 
 setup_logs()
