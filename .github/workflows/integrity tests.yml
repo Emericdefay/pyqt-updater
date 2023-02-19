@@ -51,7 +51,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: 1.0.${{ VERSION }}
+        tag_name: 1.0.${{ env.VERSION }}
         release_name: Release v1.0.${{ env.VERSION }}
         body: |
           Changes in this Release:
