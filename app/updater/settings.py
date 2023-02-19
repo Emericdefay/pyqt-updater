@@ -8,7 +8,7 @@ TAG_BACK = ""                                      # EDIT ME
 APP_NAME = "main"                                  # EDIT ME
 UPT_NAME = "update"                                # EDIT ME
 #  Tkinter updater window parameters               
-UPD_COLOR= (150, 0, 20)                            #
+UPD_COLOR= (175, 200, 255)                            #
 UPD_HEX_C= "#%02x%02x%02x" % UPD_COLOR             #
 WIDTH    = 300                                     #
 HEIGHT   = 100                                     #
