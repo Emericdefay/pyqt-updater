@@ -1,4 +1,5 @@
 # App
+pyqt5
 
 # Debug
 

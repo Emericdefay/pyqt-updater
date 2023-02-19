@@ -30,11 +30,6 @@ jobs:
       run: |
         python -m unittest ./app/launcher.py
 
-    - name: PyInstaller
-      run: |
-        pip install pyinstaller
-        pyinstaller --name app --onefile launcher.py
-
     - name: Increment version
       id: version-got-from-text
       run: |
@@ -64,7 +59,7 @@ jobs:
 
     - name: Run pyinstaller for launcher
       run: |
-        pyinstaller --onefile launcher.py
+        pyinstaller --onefile ./app/launcher.py
         
     - uses: actions/upload-artifact@v2
       with:
@@ -73,7 +68,7 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        pyinstaller --onefile ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
+        pyinstaller --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
 
     - uses: actions/upload-artifact@v2
       with:
