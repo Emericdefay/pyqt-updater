@@ -83,7 +83,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/launcher.exe
+        asset_path: ./dist/launcher
         asset_name: launcher.exe
         asset_content_type: application/zip
 
@@ -94,6 +94,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
+        asset_path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME }}
         asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
