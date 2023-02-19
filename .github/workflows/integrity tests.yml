@@ -36,9 +36,10 @@ jobs:
         pyinstaller --name app --onefile launcher.py
 
     - name: Increment version
+      id: version-got-from-text
       run: |
         # Vérifier si une mise à jour est disponible
-        echo "::set-env name=VERSION::$(cat version.txt)"
+        echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
 
     - name: Create Release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -46,8 +47,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "$VERSION"
-        release_name: "Release $VERSION"
+        tag_name: ${{ steps.version-got-from-text.outputs.VERSION }}
+        release_name: Release ${{ steps.version-got-from-text.outputs.VERSION }}
         body: |
           Changes in this Release:
           ${{ github.event.head_commit.message }}
