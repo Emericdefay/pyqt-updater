@@ -46,8 +46,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${ env.VERSION }
-        release_name: Release ${ env.VERSION }
+        tag_name: $VERSION
+        release_name: Release $VERSION
         body: |
           Changes in this Release:
           ${{ github.event.head_commit.message }}
