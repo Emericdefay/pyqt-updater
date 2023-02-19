@@ -12,7 +12,7 @@ jobs:
 
     env:
       VERSION: "1.0.0"
-      
+
     steps:
     - uses: actions/checkout@v2
 
@@ -54,5 +54,17 @@ jobs:
           ${{ github.event.head_commit.message }}
         draft: false
         prerelease: false
+
     - name: ls
       run: ls
+
+    - name: Upload asset
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./dist/app
+        asset_name: app.exe
+        asset_content_type: application/octet-stream
