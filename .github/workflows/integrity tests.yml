@@ -63,7 +63,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: launcher.exe
-        path: ./dist/app/launcher.exe
+        path: ./dist/launcher.exe
         
     - name: Run pyinstaller for app
       run: |
@@ -71,7 +71,10 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
-        path: ./dist/app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
+        path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
+
+    - name: ls
+      run: ls ./dist/
 
     - name: Upload asset launcher
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -80,7 +83,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: ./dist/app/launcher.exe
+        asset_path: ./dist/launcher.exe
         asset_name: launcher.exe
         asset_content_type: application/zip
 
@@ -91,6 +94,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: ./dist/app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
+        asset_path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
         asset_content_type: application/zip
