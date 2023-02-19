@@ -43,7 +43,7 @@ jobs:
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
     - name: Create Release
-      id: create_release
+      id: upload_url
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
       uses: actions/create-release@v1
       env:
