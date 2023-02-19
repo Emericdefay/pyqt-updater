@@ -63,7 +63,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: launcher.exe
-        path: dist/app/launcher.exe
+        path: ./dist/app/launcher.exe
         
     - name: Run pyinstaller for app
       run: |
@@ -71,7 +71,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}
-        path: dist/app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
+        path: ./dist/app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
 
     - name: Upload asset launcher
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
