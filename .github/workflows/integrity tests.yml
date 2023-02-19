@@ -59,7 +59,7 @@ jobs:
 
     - name: Run pyinstaller for launcher
       run: |
-        pyinstaller --name launcher.exe --onefile ./app/launcher.py
+        pyinstaller --name launcher.exe --onefile ./app/launcher.spec
     - uses: actions/upload-artifact@v2
       with:
         name: launcher.exe
@@ -67,7 +67,7 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        pyinstaller --name ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.py
+        pyinstaller --name ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe --onefile ./app/${{ steps.app_name_from_launcher.outputs.APP_NAME}}.spec
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.app_name_from_launcher.outputs.APP_NAME}}.exe
