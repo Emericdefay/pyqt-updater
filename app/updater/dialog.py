@@ -11,6 +11,7 @@ def dialog_error(error):
     """
     error_type = type(error).__name__
     error_message = error.args[0]
+
     # Créer une instance de fenêtre
     window = tk.Tk()
 
@@ -26,11 +27,11 @@ def dialog_error(error):
     # Définir une icône pour la fenêtre
     # window.iconbitmap('icon.ico')
 
-
     # Ajouter un label avec un message
     label = tk.Label(window, text=error_message)
     label.pack(pady=20)
     width = label.winfo_reqwidth()
     window.geometry(f"{width}x{window.winfo_reqheight()}")
+
     # Afficher la fenêtre
     window.mainloop()

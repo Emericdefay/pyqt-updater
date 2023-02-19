@@ -7,7 +7,6 @@ import queue
 import tkinter as tk
 import requests
 import logging
-import datetime
 import unittest
 
 from updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
@@ -25,7 +24,6 @@ my_queue = queue.Queue()
 
 @log_exceptions
 def load_json() -> Any:
-    logging.info("")
     with open(f"{UPT_PATH}") as f_json:
         data = json.load(f_json)
     return data
@@ -33,7 +31,6 @@ def load_json() -> Any:
 
 @log_exceptions
 def update_json(data: dict) -> None: 
-    logging.info("")
     with open(f'{UPT_PATH}', 'w') as f:
         json.dump(data, f)
 
@@ -72,7 +69,6 @@ def update(url: str) -> None:
 
 @log_exceptions
 def version_check() -> None:
-    logging.info("")
     # Récupère les paramètres JSON
     data = load_json()
     BRANCH = data['BRANCH']
@@ -118,7 +114,6 @@ def version_check() -> None:
 
 @log_exceptions
 def main() -> None:
-    logging.info("")
     # check updater integrity
     try:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestUpdateJson)

@@ -1,5 +1,5 @@
 # Debug mode                                       
-DEBUG    = True                                    # EDIT ME
+DEBUG    = False                                    # EDIT ME
 # Github Informations                              
 USER     = "Emericdefay"                           # EDIT ME
 REPO     = "dumb-app"                              # EDIT ME
