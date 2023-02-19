@@ -24,9 +24,11 @@ jobs:
         pip install -r wrkflw_reqs.txt
         pip install pytest
 
+    - name: LS
+      run: ls
     - name: Test with unittest
       run: |
-        python -m unittest discover -s tests
+        python -m unittest .\launcher.py
 
     - name: PyInstaller
       run: |
