@@ -28,9 +28,11 @@ jobs:
       run: ls
     - name: Test with unittest
       run: |
-        cd app
+        cd .\app
+        ls
         python -m unittest .\launcher.py
         cd ..
+        ls
     - name: LS
       run: ls
 
