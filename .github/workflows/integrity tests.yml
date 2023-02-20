@@ -41,7 +41,7 @@ jobs:
     - name: Get Lastchange
       id: get_changelog
       run: |
-        echo "::set-output name=value::$(echo $(cat LASTCHANGE.md))"
+        echo "::set-output name=value::$(cat << 'EOF' $(cat LASTCHANGE.md))EOF"
 
     - name: Create Release
       id: create_release
@@ -52,9 +52,7 @@ jobs:
       with:
         tag_name: ${{ steps.linux-get-env-vars.outputs.VERSION }}
         release_name: Release ${{ steps.linux-get-env-vars.outputs.VERSION }}
-        body: |
-          Changes in this Release:
-          ${{ steps.get_changelog.outputs.value }}
+        body: ${{ steps.get_changelog.outputs.value }}
         draft: false
         prerelease: false
 
@@ -92,11 +90,6 @@ jobs:
       id: load_upload_url
       run: |
         echo "::set-output name=upload_url::$(echo $(cat shares/upload_url_var.txt))"
-
-    - name: check var
-      id: geturl
-      run: |
-         echo "${{ steps.load_upload_url.outputs.upload_url }}"
 
     - name: Install dependencies
       run: |
@@ -147,7 +140,7 @@ jobs:
         asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
 
-  verify_success:
+  delete_release_if_failed:
     runs-on: ubuntu-latest
     if: ${{ always()  && contains(needs.*.result, 'failure')}}
     needs: [test-and-release, build-exe-on-release]
