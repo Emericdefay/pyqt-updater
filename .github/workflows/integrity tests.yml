@@ -41,7 +41,11 @@ jobs:
     - name: Get Lastchange
       id: get_changelog
       run: |
-        echo -e "::set-output name=value::$(echo << 'EOF' $(cat LASTCHANGE.md))EOF"
+        report=$( cat LASTCHANGE.md )
+        report="${report//'%'/'%25'}"
+        report="${report//$'\n'/'%0A'}"
+        report="${report//$'\r'/'%0D'}"
+        echo ::set-output name=report::$report
 
     - name: Create Release
       id: create_release
@@ -52,7 +56,7 @@ jobs:
       with:
         tag_name: ${{ steps.linux-get-env-vars.outputs.VERSION }}
         release_name: Release ${{ steps.linux-get-env-vars.outputs.VERSION }}
-        body: ${{ steps.get_changelog.outputs.value }}
+        body: "```\n${{ steps.get_changelog.outputs.report }}\n```"
         draft: false
         prerelease: false
 
