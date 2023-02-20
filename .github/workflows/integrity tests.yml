@@ -131,7 +131,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ env.UPLOAD_URL }}
+        upload_url: "${{ steps.load_upload_url.outputs.upload_url }}{?name,label}"
         asset_path: dist/launcher.exe
         asset_name: launcher.exe
         asset_content_type: application/zip
