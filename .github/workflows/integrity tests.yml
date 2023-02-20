@@ -34,7 +34,6 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
-        echo -e "CHANGES=$(cat LASTCHANGE.md)" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
     - name: print out vars env
@@ -53,7 +52,7 @@ jobs:
         release_name: Release ${{ steps.linux-get-env-vars.outputs.VERSION }}
         body: |
           Changes in this Release:
-          ${{ steps.linux-get-env-vars.outputs.CHANGES }}
+          $(echo -e $(cat LASTCHANGE.md) )
         draft: false
         prerelease: false
   build-exe-on-release:
