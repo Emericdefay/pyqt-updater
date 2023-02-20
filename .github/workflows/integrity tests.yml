@@ -69,8 +69,8 @@ jobs:
     - name: Upload var on artifact
       uses: actions/upload-artifact@v1
       with:
-      name: shares
-      path: upload_url_var.txt
+        name: shares
+        path: upload_url_var.txt
       
   build-exe-on-release:
     needs: test-and-release
@@ -84,9 +84,9 @@ jobs:
         python-version: 3.x
 
     - name: Download math result for job 1
-    uses: actions/download-artifact@v1
-    with:
-    name: homework
+      uses: actions/download-artifact@v1
+      with:
+        name: homework
 
     - name: bash
       id: load_upload_url
