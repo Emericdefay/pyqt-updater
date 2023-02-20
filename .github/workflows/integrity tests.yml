@@ -7,9 +7,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  UPLOAD_URL: ""
-
 
 jobs:
   test-and-release:
@@ -54,12 +51,6 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Store env variable
-      run: |
-        echo "UPLOAD_URL=${{ steps.create_release.outputs.upload_url }}" >> ${{ env.UPLOAD_URL }}
-
-    - name: echo
-      run: echo $UPLOAD_URL
 
   build-exe-on-release:
     needs: test-and-release
@@ -67,8 +58,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: echo
-      run: echo $UPLOAD_URL
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -111,7 +100,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ env.UPLOAD_URL }}
+        upload_url: ${{ github.event.release.upload_url }}
         asset_path: dist/launcher.exe
         asset_name: launcher.exe
         asset_content_type: application/zip
@@ -122,7 +111,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ github.event.release.upload_url }}
         asset_path: dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
