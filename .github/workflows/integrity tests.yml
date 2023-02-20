@@ -11,7 +11,7 @@ env:
   UPLOAD_URL: ""
 
 jobs:
-  test-and-release:
+  test-integrity-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,7 +41,7 @@ jobs:
     - name: Get Lastchange
       id: get_changelog
       run: |
-        echo "::set-output name=value::$(echo -e << 'EOF' $(cat LASTCHANGE.md))EOF"
+        echo -e "::set-output name=value::$(echo << 'EOF' $(cat LASTCHANGE.md))EOF"
 
     - name: Create Release
       id: create_release
@@ -71,7 +71,7 @@ jobs:
         path: upload_url_var.txt
       
   build-exe-on-release:
-    needs: test-and-release
+    needs: test-integrity-and-release
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2
@@ -140,10 +140,10 @@ jobs:
         asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
 
-  delete_release_if_failed:
+  delete-release-if-failed:
     runs-on: ubuntu-latest
     if: ${{ always()  && contains(needs.*.result, 'failure')}}
-    needs: [test-and-release, build-exe-on-release]
+    needs: [test-integrity-and-release, build-exe-on-release]
     steps:
     - uses: actions/checkout@v2
     - name: get version
