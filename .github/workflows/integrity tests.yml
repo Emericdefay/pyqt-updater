@@ -86,7 +86,7 @@ jobs:
     - name: Download math result for job 1
       uses: actions/download-artifact@v1
       with:
-        name: homework
+        name: shares
 
     - name: bash
       id: load_upload_url
