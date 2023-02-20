@@ -54,8 +54,8 @@ jobs:
           ${{ steps.version-got-from-text.outputs.CHANGES }}
         draft: false
         prerelease: false
-
   build-exe-on-release:
+    needs: test-and-release
     runs-on: windows-2019
     - name: Run pyinstaller for launcher
       run: |
