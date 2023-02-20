@@ -85,6 +85,8 @@ jobs:
       run: |
         echo "${{ steps.win-get-env-vars.outputs.APP_NAME }}"
         echo "$APP_NAME"
+        echo "${APP_NAME}"
+        echo "${env.APP_NAME}"
 
     - name: Run pyinstaller for launcher
       run: |
@@ -126,3 +128,10 @@ jobs:
         asset_path: dist/${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
         asset_name: ${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
+
+    - name: Delete Release on Failure
+      if: failure() && steps.create_release.outputs.id
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        delete_version: ${{ steps.create_release.outputs.tag_name }}
