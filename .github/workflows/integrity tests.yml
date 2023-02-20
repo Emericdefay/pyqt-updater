@@ -91,8 +91,11 @@ jobs:
         name: ${{ steps.win_app_name.outputs.APP_NAME }}
         path: ./dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
 
-    - name: ls
-      run: ls ./dist/
+    - name: Get upload URL
+      id: geturl
+      run:   |
+         upload_url=$(curl -sL https://api.github.com/repos/${{github.repository}}/releases/latest?access_token=${{ secrets.GITHUB_TOKEN }} | jq -r '.upload_url')
+         echo ::set-output name=upload_url::$upload_url
 
     - name: Upload asset launcher
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
@@ -111,7 +114,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ github.event.release.upload_url }}
+        upload_url: ${{ github.geturl.outputs.upload_url }}
         asset_path: dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
