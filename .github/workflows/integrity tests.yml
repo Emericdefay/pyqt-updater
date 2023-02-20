@@ -28,7 +28,7 @@ jobs:
         python -m unittest ./app/launcher.py
 
     - name: Get version
-      id: version-got-from-text
+      id: linux-get-env-vars
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
@@ -43,11 +43,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.version-got-from-text.outputs.VERSION }}
-        release_name: Release ${{ steps.version-got-from-text.outputs.VERSION }}
+        tag_name: ${{ steps.linux-get-env-vars.outputs.VERSION }}
+        release_name: Release ${{ steps.linux-get-env-vars.outputs.VERSION }}
         body: |
           Changes in this Release:
-          ${{ steps.version-got-from-text.outputs.CHANGES }}
+          ${{ steps.linux-get-env-vars.outputs.CHANGES }}
         draft: false
         prerelease: false
   build-exe-on-release:
@@ -67,7 +67,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Get version
-      id: version-got-from-text
+      id: win-get-env-vars
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
@@ -84,11 +84,11 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        python -m PyInstaller ${{ steps.version-got-from-text.outputs.APP_NAME }}.spec
+        python -m PyInstaller ${{ steps.win-get-env-vars.outputs.APP_NAME }}.spec
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.version-got-from-text.outputs.APP_NAME }}
-        path: ./dist/${{ steps.version-got-from-text.outputs.APP_NAME }}.exe
+        name: ${{ steps.win-get-env-vars.outputs.APP_NAME }}
+        path: ./dist/${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
 
     - name: ls
       run: ls ./dist/
@@ -104,13 +104,13 @@ jobs:
         asset_name: launcher.exe
         asset_content_type: application/zip
 
-    - name: Upload asset ${{ steps.version-got-from-text.outputs.APP_NAME }}
+    - name: Upload asset ${{ steps.win-get-env-vars.outputs.APP_NAME }}
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/${{ steps.version-got-from-text.outputs.APP_NAME }}.exe
-        asset_name: ${{ steps.version-got-from-text.outputs.APP_NAME }}.exe
+        asset_path: dist/${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
+        asset_name: ${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
