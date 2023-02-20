@@ -57,13 +57,19 @@ jobs:
           ${{ steps.get_changelog.outputs.value }}
         draft: false
         prerelease: false
-    - name: Export var
+
+    - name: set var
       run: |
         variable=${{ steps.create_release.outputs.upload_url }}
         variable=$(echo $variable | sed 's/{?name,label}//g')
-        echo $variable
-        echo $variable >> ${{ env.UPLOAD_URL }}
 
+    - name: print var
+      run: |
+        echo $variable
+
+    - name: Export var
+      run: |
+        echo "VAR=$variable" >> ${{ env.UPLOAD_URL }}
 
   build-exe-on-release:
     needs: test-and-release
