@@ -7,11 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  test-and-release:
     runs-on: ubuntu-latest
-
-    env:
-      VERSION: "1.0.0"
 
     steps:
     - uses: actions/checkout@v2
@@ -30,11 +27,12 @@ jobs:
       run: |
         python -m unittest ./app/launcher.py
 
-    - name: Increment version
+    - name: Get version
       id: version-got-from-text
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
+        echo "CHANGES=$(cat LASTCHANGE.md)" >> $GITHUB_OUTPUT
 
     - name: Get App Name
       id: app_name_from_launcher
@@ -53,10 +51,12 @@ jobs:
         release_name: Release ${{ steps.version-got-from-text.outputs.VERSION }}
         body: |
           Changes in this Release:
-          ${{ github.event.head_commit.message }}
+          ${{ steps.version-got-from-text.outputs.CHANGES }}
         draft: false
         prerelease: false
 
+  build-exe-on-release:
+    runs-on: windows-2019
     - name: Run pyinstaller for launcher
       run: |
         python -m PyInstaller  launcher.spec
@@ -83,7 +83,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/launcher
+        asset_path: dist/launcher.exe
         asset_name: launcher.exe
         asset_content_type: application/zip
 
@@ -94,6 +94,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME }}
+        asset_path: dist/${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
         asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
         asset_content_type: application/zip

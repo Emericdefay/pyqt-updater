@@ -11,15 +11,15 @@ import logging
 import unittest
 
 try:
-
     from updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
     from updater.paths import APP_PATH, UPT_PATH
     from updater.spinner import DownloadProgressBar
     from updater.dialog import dialog_error
     from updater.tests.test_integrity import TestUpdateJson
 
-    from dbg.logs import setup_logs, log_exceptions
+    from tools.repair_upt import repair_update_json
 
+    from dbg.logs import setup_logs, log_exceptions
 except ModuleNotFoundError:
     sys.path.append(
         os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
@@ -29,6 +29,8 @@ except ModuleNotFoundError:
     from app.updater.spinner import DownloadProgressBar
     from app.updater.dialog import dialog_error
     from app.updater.tests.test_integrity import TestUpdateJson
+
+    from app.tools.repair_upt import repair_update_json
 
     from app.dbg.logs import setup_logs, log_exceptions
 
@@ -42,9 +44,13 @@ def get_app_name():
 
 @log_exceptions
 def load_json() -> Any:
-    with open(f"{UPT_PATH}") as f_json:
-        data = json.load(f_json)
-    return data
+    try:
+        with open(f"{UPT_PATH}") as f_json:
+            data = json.load(f_json)
+        return data
+    except FileNotFoundError:
+        repair_update_json()
+        load_json()
 
 
 @log_exceptions
@@ -132,6 +138,8 @@ def version_check() -> None:
 
 @log_exceptions
 def main() -> None:
+    # check json
+    load_json()
     # check updater integrity
     try:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestUpdateJson)
