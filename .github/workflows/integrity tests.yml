@@ -58,15 +58,19 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: print var
-      run: echo $(echo "${{ steps.create_release.outputs.upload_url }}" | sed 's/{[^{}]\+}//')
-
     - name: Export var
       run: |
         echo "UPLOAD_URL=$(echo "${{ steps.create_release.outputs.upload_url }}" | sed 's/{[^{}]\+}//')" >> $GITHUB_ENV
 
-    - name: print var
-      run: echo ${{ env.UPLOAD_URL }}
+    - name: transfert var to txt
+      run: |
+      ${{ env.UPLOAD_URL}} > upload_url_var.txt
+
+    - name: Upload var on artifact
+      uses: actions/upload-artifact@v1
+      with:
+      name: shares
+      path: upload_url_var.txt
       
   build-exe-on-release:
     needs: test-and-release
@@ -79,10 +83,20 @@ jobs:
       with:
         python-version: 3.x
 
+    - name: Download math result for job 1
+    uses: actions/download-artifact@v1
+    with:
+    name: homework
+
+    - name: bash
+      id: load_upload_url
+      run: |
+        echo "::set-output name=upload_url::$(echo $(cat shares/upload_url_var.txt))"
+
     - name: check var
       id: geturl
       run: |
-         echo "${{ env.UPLOAD_URL }}"
+         echo "${{ steps.load_upload_url.outputs.upload_url }}"
 
     - name: Install dependencies
       run: |
@@ -117,7 +131,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ github.event.release.upload_url }}
+        upload_url: ${{ env.UPLOAD_URL }}
         asset_path: dist/launcher.exe
         asset_name: launcher.exe
         asset_content_type: application/zip
