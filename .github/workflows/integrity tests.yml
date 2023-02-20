@@ -58,23 +58,12 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Set var
-      run: |
-        variable=${{ steps.create_release.outputs.upload_url }}
-
-    - name: print var
-      run: echo "$variable"
-
-    - name: Set var
-      run: |
-        variable=$(echo $variable | sed 's/{?name,label}//g')
-
     - name: Export var
       run: |
-        echo "UPLOAD_URL=$(echo $variable)" >> $GITHUB_ENV
+        echo "::set-env name=UPLOAD_URL::$(echo ${{ steps.create_release.outputs.upload_url }} | sed 's/{?name,label}//g')"
 
     - name: print var
-      run: echo "$variable"
+      run: echo "${{ env.UPLOAD_URL }}"
       
   build-exe-on-release:
     needs: test-and-release
