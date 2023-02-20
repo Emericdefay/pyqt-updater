@@ -38,6 +38,10 @@ jobs:
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
+    - name: Set Lastchange
+      run: |
+        sed -n '/<lastchange>/,/<\/lastchange>/p' CHANGELOG.md | sed '1d;$d' > LASTCHANGE.md
+
     - name: Get Lastchange
       id: get_changelog
       run: |
