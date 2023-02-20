@@ -85,11 +85,6 @@ jobs:
     - name: print out vars env
       run: |
         echo "${{ steps.win_app_name.outputs.APP_NAME }}"
-        echo "$APP_NAME"
-        echo "${APP_NAME}"
-        echo "${env.APP_NAME}"
-        echo "${{APP_NAME}}"
-        echo "${{env.APP_NAME}}"
 
     - name: Run pyinstaller for launcher
       run: |
