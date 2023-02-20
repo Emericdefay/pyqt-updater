@@ -142,7 +142,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: "${{{ steps.load_upload_url.outputs.upload_url }}{?name,label}"
+        upload_url: "${{ steps.load_upload_url.outputs.upload_url }}{?name,label}"
         asset_path: dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
