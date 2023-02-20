@@ -34,7 +34,7 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
-        CAT_LASTCHG=echo -c "$(cat LASTCHANGE.md)
+        CAT_LASTCHG=echo -c "$(cat LASTCHANGE.md)"
         echo "CHANGES=${CAT_LASTCHG}" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
