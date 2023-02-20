@@ -60,7 +60,7 @@ jobs:
 
     - name: Export var
       run: |
-        echo "::set-env name=UPLOAD_URL::$(echo ${{ steps.create_release.outputs.upload_url }} | sed 's/{?name,label}//g')"
+        echo "::set-env name=UPLOAD_URL::$(echo "${{ steps.create_release.outputs.upload_url }}" | sed 's/{[^{}]\+}//')"
 
     - name: print var
       run: echo "${{ env.UPLOAD_URL }}"
