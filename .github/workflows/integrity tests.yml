@@ -58,25 +58,20 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: set var
+    - name: Set var
       run: |
         variable=${{ steps.create_release.outputs.upload_url }}
         variable=$(echo $variable | sed 's/{?name,label}//g')
 
-    - name: print var
-      run: |
-        echo $variable
-
     - name: Export var
       run: |
-        echo "VAR=$variable" >> ${{ env.UPLOAD_URL }}
+        echo "UPLOAD_URL=$variable" >> $GITHUB_ENV
 
   build-exe-on-release:
     needs: test-and-release
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2
-
 
     - name: Set up Python
       uses: actions/setup-python@v2
