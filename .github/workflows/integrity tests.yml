@@ -37,6 +37,11 @@ jobs:
         echo "CHANGES=$(echo -c '$(cat LASTCHANGE.md)')" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
+    - name: print out vars env
+      run: |
+        echo "${{ steps.win-get-env-vars.outputs.APP_NAME }}"
+        echo "$APP_NAME"
+
     - name: Create Release
       id: create_release
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
@@ -67,11 +72,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Get version
+    - name: Get app name
       id: win-get-env-vars
       run: |
-        echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
-        # echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
+        # echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
+        echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
+
+    - name: ls
+      run: ls ./app/
 
     - name: print out vars env
       run: |
