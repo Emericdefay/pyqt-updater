@@ -56,7 +56,7 @@ jobs:
 
     - name: Store env variable
       run: |
-        echo "'${{ steps.create_release.outputs.upload_url }}'" >> ${{ env.UPLOAD_URL }}
+        echo "UPLOAD_URL=${{ steps.create_release.outputs.upload_url }}" >> ${{ env.UPLOAD_URL }}
 
     - name: echo
       run: echo $UPLOAD_URL
