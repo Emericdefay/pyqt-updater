@@ -33,12 +33,8 @@ jobs:
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
         echo "CHANGES=$(cat LASTCHANGE.md)" >> $GITHUB_OUTPUT
-
-    - name: Get App Name
-      id: app_name_from_launcher
-      run: |
-        # Get app name from launcher.py 
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
+
 
     - name: Create Release
       id: create_release
@@ -69,6 +65,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Get version
+      id: version-got-from-text
+      run: |
+        # Vérifier si une mise à jour est disponible
+        echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
+        echo "CHANGES=$(cat LASTCHANGE.md)" >> $GITHUB_OUTPUT
+        echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
+
     - name: Run pyinstaller for launcher
       run: |
         python -m PyInstaller  launcher.spec
@@ -79,11 +84,11 @@ jobs:
         
     - name: Run pyinstaller for app
       run: |
-        python -m PyInstaller ${{ steps.app_name_from_launcher.outputs.APP_NAME }}.spec
+        python -m PyInstaller ${{ steps.version-got-from-text.outputs.APP_NAME }}.spec
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.app_name_from_launcher.outputs.APP_NAME }}
-        path: ./dist/${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
+        name: ${{ steps.version-got-from-text.outputs.APP_NAME }}
+        path: ./dist/${{ steps.version-got-from-text.outputs.APP_NAME }}.exe
 
     - name: ls
       run: ls ./dist/
@@ -99,13 +104,13 @@ jobs:
         asset_name: launcher.exe
         asset_content_type: application/zip
 
-    - name: Upload asset ${{ steps.app_name_from_launcher.outputs.APP_NAME }}
+    - name: Upload asset ${{ steps.version-got-from-text.outputs.APP_NAME }}
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
-        asset_name: ${{ steps.app_name_from_launcher.outputs.APP_NAME }}.exe
+        asset_path: dist/${{ steps.version-got-from-text.outputs.APP_NAME }}.exe
+        asset_name: ${{ steps.version-got-from-text.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
