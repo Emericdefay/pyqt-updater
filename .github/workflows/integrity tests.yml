@@ -57,6 +57,7 @@ jobs:
   build-exe-on-release:
     needs: test-and-release
     runs-on: windows-2019
+    steps:
     - name: Run pyinstaller for launcher
       run: |
         python -m PyInstaller  launcher.spec
