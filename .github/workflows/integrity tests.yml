@@ -34,12 +34,13 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
-        echo "CHANGES=$(echo -c '$(cat LASTCHANGE.md)')" >> $GITHUB_OUTPUT
+        CAT_LASTCHG=echo -c "$(cat LASTCHANGE.md)
+        echo "CHANGES=${CAT_LASTCHG}" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
     - name: print out vars env
       run: |
-        echo "${{ steps.win-get-env-vars.outputs.APP_NAME }}"
+        echo "${{ steps.linux-get-env-vars.outputs.APP_NAME }}"
         echo "$APP_NAME"
 
     - name: Create Release
@@ -73,7 +74,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Get app name
-      id: win-get-env-vars
+      id: win_app_name
       run: |
         # echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
@@ -83,10 +84,12 @@ jobs:
 
     - name: print out vars env
       run: |
-        echo "${{ steps.win-get-env-vars.outputs.APP_NAME }}"
+        echo "${{ steps.win_app_name.outputs.APP_NAME }}"
         echo "$APP_NAME"
         echo "${APP_NAME}"
         echo "${env.APP_NAME}"
+        echo "${{APP_NAME}}"
+        echo "${{env.APP_NAME}}"
 
     - name: Run pyinstaller for launcher
       run: |
@@ -98,11 +101,11 @@ jobs:
 
     - name: Run pyinstaller for app
       run: |
-        python -m PyInstaller ${{ steps.win-get-env-vars.outputs.APP_NAME }}.spec
+        python -m PyInstaller ${{ steps.win_app_name.outputs.APP_NAME }}.spec
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.win-get-env-vars.outputs.APP_NAME }}
-        path: ./dist/${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
+        name: ${{ steps.win_app_name.outputs.APP_NAME }}
+        path: ./dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
 
     - name: ls
       run: ls ./dist/
@@ -118,15 +121,15 @@ jobs:
         asset_name: launcher.exe
         asset_content_type: application/zip
 
-    - name: Upload asset ${{ steps.win-get-env-vars.outputs.APP_NAME }}
+    - name: Upload asset ${{ steps.win_app_name.outputs.APP_NAME }}
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
-        asset_name: ${{ steps.win-get-env-vars.outputs.APP_NAME }}.exe
+        asset_path: dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
+        asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
 
     - name: Delete Release on Failure
