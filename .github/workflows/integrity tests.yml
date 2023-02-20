@@ -34,7 +34,7 @@ jobs:
       run: |
         # Vérifier si une mise à jour est disponible
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
-        CAT_LASTCHG=echo -c "$(cat LASTCHANGE.md)"
+        CAT_LASTCHG=echo -e "$(cat LASTCHANGE.md)"
         echo "CHANGES=${CAT_LASTCHG}" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
@@ -127,6 +127,11 @@ jobs:
         asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
         asset_content_type: application/zip
 
+  verify_success:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+    - uses: actions/checkout@v2
     - name: Delete Release on Failure
       if: failure() && steps.create_release.outputs.id
       uses: "marvinpinto/action-automatic-releases@latest"
