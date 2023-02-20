@@ -149,13 +149,11 @@ jobs:
 
   verify_success:
     runs-on: ubuntu-latest
-    if: ${{ always() }}
+    if: ${{ always()  && contains(needs.*.result, 'failure')}}
     needs: [test-and-release, build-exe-on-release]
     steps:
-    
     - uses: actions/checkout@v2
     - name: Delete Release on Failure
-      if: failure()
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
