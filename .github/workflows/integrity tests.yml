@@ -56,7 +56,7 @@ jobs:
       with:
         tag_name: ${{ steps.linux-get-env-vars.outputs.VERSION }}
         release_name: Release ${{ steps.linux-get-env-vars.outputs.VERSION }}
-        body: "```\n${{ steps.get_changelog.outputs.report }}\n```"
+        body: "\n${{ steps.get_changelog.outputs.report }}\n"
         draft: false
         prerelease: false
 
