@@ -55,7 +55,7 @@ jobs:
         prerelease: false
 
     - name: Store env variable
-      run: UPLOAD_URL = ${{ steps.create_release.outputs.upload_url }}
+      run: echo "${{ steps.create_release.outputs.upload_url }}" >> ${{ env.UPLOAD_URL }}
 
     - name: echo
       run: echo $UPLOAD_URL
@@ -85,9 +85,6 @@ jobs:
         # echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $env:GITHUB_OUTPUT
 
-    - name: Retrieve env variable
-      run: echo $UPLOAD_URL
-
     - name: Run pyinstaller for launcher
       run: |
         python -m PyInstaller  launcher.spec
@@ -113,7 +110,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ env.UPLOAD_URL }}
         asset_path: dist/launcher.exe
         asset_name: launcher.exe
         asset_content_type: application/zip
