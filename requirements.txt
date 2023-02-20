@@ -2,9 +2,7 @@
 pyqt5
 
 # Debug
-
-# Launcher
-pywin32
+# ...
 
 # Updater
 requests

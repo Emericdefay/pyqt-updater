@@ -1,6 +1,5 @@
 name: Python CI
 
-
 on:
   push:
     branches: [ main ]
@@ -25,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r wrkflw_reqs.txt
+        pip install -r requirements.txt
 
     - name: Test with unittest
       run: |
@@ -81,6 +80,7 @@ jobs:
   build-exe-on-release:
     needs: test-integrity-and-release
     runs-on: windows-2019
+
     steps:
     - uses: actions/checkout@v2
 
@@ -103,16 +103,16 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install -r requirements-WIN.txt
 
     - name: Get app name
       id: win_app_name
       run: |
-        # echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $env:GITHUB_OUTPUT
 
     - name: Run pyinstaller for launcher
       run: |
-        python -m PyInstaller  launcher.spec
+        python -m PyInstaller ./specs/launcher.spec
     - uses: actions/upload-artifact@v2
       with:
         name: launcher
@@ -120,7 +120,7 @@ jobs:
 
     - name: Run pyinstaller for app
       run: |
-        python -m PyInstaller ${{ steps.win_app_name.outputs.APP_NAME }}.spec
+        python -m PyInstaller ./specs/${{ steps.win_app_name.outputs.APP_NAME }}.spec
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.win_app_name.outputs.APP_NAME }}
@@ -152,11 +152,14 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ always()  && contains(needs.*.result, 'failure')}}
     needs: [test-integrity-and-release, build-exe-on-release]
+
     steps:
     - uses: actions/checkout@v2
+
     - name: get version
       id: get_version
       run: echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
+
     - name: Delete Release on Failure
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
