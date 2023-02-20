@@ -5,8 +5,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ].
-
+    branches: [ main ]
 
 env:
   UPLOAD_URL: ""
@@ -69,7 +68,7 @@ jobs:
 
     - name: echo
       run: echo $UPLOAD_URL
-      
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
