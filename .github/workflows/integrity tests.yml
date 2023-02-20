@@ -41,7 +41,7 @@ jobs:
     - name: Get Lastchange
       id: get_changelog
       run: |
-      echo "::set-output name=value::$(echo -e $(cat LASTCHANGE.md))"
+      echo ::set-output name=value::$(echo -e $(cat LASTCHANGE.md))
 
     - name: Create Release
       id: create_release
