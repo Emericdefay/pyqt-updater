@@ -70,12 +70,12 @@ jobs:
     - name: Get version
       id: win-get-env-vars
       run: |
-        echo $(python -c 'from app.launcher import get_app_name; print(get_app_name())')
+        # echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
     - name: print out vars env
       run: |
-        echo ${{ steps.win-get-env-vars.outputs.APP_NAME }}
+        echo "${{ steps.win-get-env-vars.outputs.APP_NAME }}"
 
     - name: Run pyinstaller for launcher
       run: |
