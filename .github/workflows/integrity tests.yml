@@ -41,7 +41,7 @@ jobs:
     - name: Get Lastchange
       id: get_changelog
       run: |
-        echo "::set-output name=value::$(echo -e $(cat LASTCHANGE.md))"
+        echo "::set-output name=value::$(echo $(cat LASTCHANGE.md))"
 
     - name: Create Release
       id: create_release
@@ -159,4 +159,4 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        delete_version: ${{ steps.create_release.outputs.tag_name }}
+        delete_version: echo $(cat version.txt)
