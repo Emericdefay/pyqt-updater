@@ -1,15 +1,15 @@
 ## [1.0.0] - 2023-02-20
 
-### Added
+## Added
 
 - 
 
-### Changed
+## Changed
 
-### Deprecated
+## Deprecated
 
-### Removed
+## Removed
 
-### Fixed
+## Fixed
 
-### Security
+## Security
