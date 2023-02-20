@@ -36,11 +36,6 @@ jobs:
         echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $GITHUB_OUTPUT
 
-    - name: print out vars env
-      run: |
-        echo "${{ steps.linux-get-env-vars.outputs.APP_NAME }}"
-        echo "$APP_NAME"
-
     - name: Create Release
       id: create_release
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
@@ -52,9 +47,13 @@ jobs:
         release_name: Release ${{ steps.linux-get-env-vars.outputs.VERSION }}
         body: |
           Changes in this Release:
-          $(echo -e $(cat LASTCHANGE.md) )
+          ${echo -e $(cat LASTCHANGE.md) }
         draft: false
         prerelease: false
+
+    - name: Store env variable
+      run: echo "::set-env name=UPLOAD_URL::${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
+
   build-exe-on-release:
     needs: test-and-release
     runs-on: windows-2019
@@ -76,14 +75,9 @@ jobs:
       run: |
         # echo  APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())') >> $GITHUB_OUTPUT
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $env:GITHUB_OUTPUT
-      # shell: bash
 
-    - name: ls
-      run: ls ./app/
-
-    - name: print out vars env
-      run: |
-        echo "${{ steps.win_app_name.outputs.APP_NAME }}"
+    - name: Retrieve env variable
+      run: echo $UPLOAD_URL
 
     - name: Run pyinstaller for launcher
       run: |
