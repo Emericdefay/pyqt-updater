@@ -65,8 +65,13 @@ jobs:
 
     - name: Export var
       run: |
-        echo "UPLOAD_URL=$variable" >> $GITHUB_ENV
-
+        echo "UPLOAD_URL=$(echo $variable)" >> $GITHUB_ENV
+  
+    - name: Export var
+      run: |
+        echo $variable
+        echo $UPLOAD_URL
+      
   build-exe-on-release:
     needs: test-and-release
     runs-on: windows-2019
