@@ -64,6 +64,9 @@ jobs:
     - name: Export var
       run: |
         echo "UPLOAD_URL=$(echo "${{ steps.create_release.outputs.upload_url }}" | sed 's/{[^{}]\+}//')" >> $GITHUB_ENV
+
+    - name: print var
+      run: echo ${{ env.UPLOAD_URL }}
       
   build-exe-on-release:
     needs: test-and-release
