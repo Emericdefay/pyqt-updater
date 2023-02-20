@@ -154,7 +154,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Delete Release on Failure
-      uses: "marvinpinto/action-automatic-releases@latest"
+      uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        delete_version: echo $(cat version.txt)
+        tag_name: $(cat version.txt) 
+        delete_release: true 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
