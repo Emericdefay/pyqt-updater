@@ -5,7 +5,11 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: [ main ].
+
+
+env:
+  UPLOAD_URL: ""
 
 
 jobs:
@@ -52,7 +56,10 @@ jobs:
         prerelease: false
 
     - name: Store env variable
-      run: echo "::set-env name=UPLOAD_URL::${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
+      run: UPLOAD_URL = ${{ steps.create_release.outputs.upload_url }}
+
+    - name: echo
+      run: echo $UPLOAD_URL
 
   build-exe-on-release:
     needs: test-and-release
@@ -60,6 +67,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: echo
+      run: echo $UPLOAD_URL
+      
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -125,6 +135,7 @@ jobs:
     if: ${{ always() }}
     needs: [test-and-release, build-exe-on-release]
     steps:
+    
     - uses: actions/checkout@v2
     - name: Delete Release on Failure
       if: failure() && steps.create_release.outputs.id
