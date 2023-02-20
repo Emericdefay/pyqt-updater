@@ -153,10 +153,13 @@ jobs:
     needs: [test-and-release, build-exe-on-release]
     steps:
     - uses: actions/checkout@v2
+    - name: get version
+      id: get_version
+      run: echo "VERSION=$(cat version.txt)" >> $GITHUB_OUTPUT
     - name: Delete Release on Failure
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
-        tag_name: echo $(cat version.txt) 
+        tag_name: ${{ steps.get_version.outputs.VERSION }} 
         delete_release: true 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
