@@ -64,7 +64,7 @@ jobs:
 
     - name: transfert var to txt
       run: |
-        ${{ env.UPLOAD_URL}} > upload_url_var.txt
+        echo "${{ env.UPLOAD_URL}}" > upload_url_var.txt
 
     - name: Upload var on artifact
       uses: actions/upload-artifact@v1
