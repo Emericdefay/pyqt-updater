@@ -5,9 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+<lastchange>
+
 ## [Unreleased]
 
-- /
+- 
 
 ## [1.0.0] - 2023-02-20
 
@@ -25,6 +27,8 @@ and this project adheres to [Semantic Versioning].
 
 ### Security
 
+
+</lastchange>
 
 <!-- Links -->
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
