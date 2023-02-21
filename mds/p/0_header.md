@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="./com/{logo_name}" alt="{app_name} logo"></a>
+ <img width=200px src="./com/{logo_name}" alt="{app_name} logo"></a>
 </p>
 
 <h3 align="center">{app_name}</h3>

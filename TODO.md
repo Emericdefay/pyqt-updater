@@ -1,1 +1,8 @@
-- [ ] dz
+- [ ] 1st March : Retry build after reset monthly limit
+- [ ] Create compilations in zip
+  - [ ] Edit specs
+  - [ ] rework updater.py to make it work with zip and --onefile exe
+- [ ] Create a modular app system
+  - [ ] PyQt5 app
+- [ ] Create a login system that identify user and check if authorized
+- [ ] Feed docstring 

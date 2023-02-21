@@ -2,3 +2,5 @@
 - [Express](https://expressjs.com/) - Server Framework
 - [VueJs](https://vuejs.org/) - Web Framework
 - [NodeJs](https://nodejs.org/en/) - Server Environment
+- [Python](https://www.python.org/) - Programming language
+- [PyQt](https://www.riverbankcomputing.com/software/pyqt/) - Qt application Framework
