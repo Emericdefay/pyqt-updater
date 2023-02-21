@@ -11,7 +11,7 @@ from app.updater.settings import USER, REPO, APP_NAME
 # vars
 paths = []
 struct = {
-    '{logo_name}': f'{APP_NAME} logo',
+    '{logo_name}': f'dumb-logo.png',
     '{app_name}': APP_NAME,
     '{USER}': USER,
     '{REPO}': REPO,
