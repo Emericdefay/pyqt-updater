@@ -1,0 +1,47 @@
+name: build README
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-read-me:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-MDS.txt
+
+      - name: Make Empty README
+        run: python mds/emptier.py
+
+      - name: Commit files
+        run: |
+          git config --local user.name "workflow"
+          git add README.md
+          git commit -m "[Workflow] - reset README"
+
+      - name: Run the script
+        run: python mds/builder.py
+
+      - name: Commit files
+        run: |
+          git config --local user.name "workflow"
+          git add README.md
+          git commit -m "[Workflow] - Build README"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force: true

@@ -18,10 +18,7 @@ lib_dir = os.path.join(base_path, 'dist', f'{APP_NAME}', 'lib')
 dist_dir = os.path.join(base_path, 'dist', f'{APP_NAME}')
 app_dir = os.path.join(base_path, 'app', f'{APP_NAME}.py')
 
-
-
 block_cipher = None
-
 
 a = Analysis(
     [f'.\\..\\app\\{APP_NAME}.py'],
@@ -38,6 +35,7 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
@@ -57,6 +55,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
@@ -69,7 +68,7 @@ coll = COLLECT(
 )
 
 for (dirpath, dirnames, filenames) in os.walk(dist_dir):
-    if "PyQt5" in dirpath:
+    if dirpath is not dist_dir:
         continue
     for filename in filenames:
         if filename.endswith('.dll') or filename.endswith('.pyd'):

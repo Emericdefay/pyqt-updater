@@ -11,17 +11,21 @@ try:
 except ModuleNotFoundError:
     APP_NAME = 'main'
 
-
 LAUNCHER_NAME = 'launcher'
+
 
 # Get the path of the folder containing the .spec file
 base_path = Path('').parent.absolute()
 lib_dir = os.path.join(base_path, 'dist', f'{APP_NAME}', 'lib')
 dist_dir = os.path.join(base_path, 'dist', f'{APP_NAME}')
 
+
+
 block_cipher = None
 
-a = Analysis(
+# launcher
+
+launcher_a = Analysis(
     [f'.\\..\\app\\{LAUNCHER_NAME}.py'],
     pathex=[base_path],
     binaries=[],
@@ -37,11 +41,11 @@ a = Analysis(
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+launcher_pyz = PYZ(launcher_a.pure, launcher_a.zipped_data, cipher=block_cipher)
 
-exe = EXE(
-    pyz,
-    a.scripts,
+launcher_exe = EXE(
+    launcher_pyz,
+    launcher_a.scripts,
     [],
     exclude_binaries=True,
     name=f'{LAUNCHER_NAME}',
@@ -56,11 +60,53 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
+
+# app
+app_a = Analysis(
+    [f'.\\..\\app\\{APP_NAME}.py'],
+    pathex=[base_path],
+    binaries=[],
+    datas=[],
+    hiddenimports=[],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[f'{os.path.join(base_path, "specs", "add_lib.py")}'],
+    excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
+)
+app_pyz = PYZ(app_a.pure, app_a.zipped_data, cipher=block_cipher)
+
+app_exe = EXE(
+    app_pyz,
+    app_a.scripts,
+    [],
+    exclude_binaries=True,
+    name=f'{APP_NAME}',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
+
+
 coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
+    launcher_exe,
+    launcher_a.binaries,
+    launcher_a.zipfiles,
+    launcher_a.datas,
+    app_exe,
+    app_a.binaries,
+    app_a.zipfiles,
+    app_a.datas,
     strip=False,
     upx=True,
     upx_exclude=[],
@@ -68,7 +114,6 @@ coll = COLLECT(
 )
 
 for (dirpath, dirnames, filenames) in os.walk(dist_dir):
-    print(dirpath)
     if dirpath is not dist_dir:
         continue
     for filename in filenames:

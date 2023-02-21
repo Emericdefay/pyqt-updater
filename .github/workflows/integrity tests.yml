@@ -1,4 +1,4 @@
-name: Python CI
+name: Integrity Tests, compiling & releasing
 
 on:
   push:
@@ -77,45 +77,6 @@ jobs:
         name: shares
         path: upload_url_var.txt
 
-  build-read-me:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-MDS.txt
-
-      - name: Make Empty README
-        run: python mds/emptier.py
-
-      - name: Commit files
-        run: |
-          git config --local user.name "workflow"
-          git add README.md
-          git commit -m "[Workflow] - reset README"
-
-      - name: Run the script
-        run: python mds/builder.py
-
-      - name: Commit files
-        run: |
-          git config --local user.name "workflow"
-          git add README.md
-          git commit -m "[Workflow] - Build README"
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
-
   build-exe-on-release:
     needs: test-integrity-and-release
     runs-on: windows-2019
@@ -149,21 +110,13 @@ jobs:
       run: |
         echo "APP_NAME=$(python -c 'from app.launcher import get_app_name; print(get_app_name())')" >> $env:GITHUB_OUTPUT
 
-    - name: Run pyinstaller for launcher
-      run: |
-        python -m PyInstaller ./specs/launcher.spec
-    - uses: actions/upload-artifact@v2
-      with:
-        name: launcher
-        path: ./dist/launcher.exe
-
     - name: Run pyinstaller for app
       run: |
-        python -m PyInstaller ./specs/${{ steps.win_app_name.outputs.APP_NAME }}.spec
+        python -m PyInstaller ./specs/compilation.spec
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.win_app_name.outputs.APP_NAME }}
-        path: ./dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
+        path: ./dist/
 
     - name: Upload asset launcher
       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
@@ -172,19 +125,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: "${{ steps.load_upload_url.outputs.upload_url }}{?name,label}"
-        asset_path: dist/launcher.exe
-        asset_name: launcher.exe
-        asset_content_type: application/zip
-
-    - name: Upload asset ${{ steps.win_app_name.outputs.APP_NAME }}
-      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'merge')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: "${{ steps.load_upload_url.outputs.upload_url }}{?name,label}"
-        asset_path: dist/${{ steps.win_app_name.outputs.APP_NAME }}.exe
-        asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}.exe
+        asset_path: dist/${{ steps.win_app_name.outputs.APP_NAME }}
+        asset_name: ${{ steps.win_app_name.outputs.APP_NAME }}
         asset_content_type: application/zip
 
   delete-release-if-failed:

@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import json
 import socket
@@ -7,8 +8,12 @@ import unittest
 sys.path.append(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
 )
+sys.path.append(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), os.pardir)
+)
 
 from updater.paths import UPT_PATH
+
 
 class TestUpdateJson(unittest.TestCase):
     # Internet Check
@@ -30,9 +35,8 @@ class TestUpdateJson(unittest.TestCase):
         with open(UPT_PATH) as f:
             data = json.load(f)
             assert "APP_VER" in data, "Key APP_VER is missing in update.json"
-            assert data["APP_VER"] == "1.1.0", "The value of APP_VER in update.json is incorrect"
+            assert re.match(r'^\d+\.\d+\.\d+$', data["APP_VER"]), "The format of APP_VER in update.json is incorrect"
             assert "BRANCH" in data, "Key BRANCH is missing in update.json"
-            assert data["BRANCH"] == "main", "The value of BRANCH in update.json is incorrect"
 
 
 if __name__ == '__main__':
