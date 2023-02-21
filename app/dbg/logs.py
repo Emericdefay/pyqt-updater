@@ -30,7 +30,7 @@ def setup_logs():
         format='%(asctime)s %(levelname)s %(funcName)s %(message)s'
     )
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    handler = TimedRotatingFileHandler('logs/error.log', when="midnight", interval=1, encoding='utf8')
+    handler = TimedRotatingFileHandler(full_path, when="midnight", interval=1, encoding='utf8')
     handler.suffix = "%Y-%m-%d"
     handler.setFormatter(formatter)
     logger = logging.getLogger()
