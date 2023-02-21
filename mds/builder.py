@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup as bs
 import os, sys
+from bs4 import BeautifulSoup as bs
 
 sys.path.append(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
@@ -8,33 +8,8 @@ sys.path.append(
 from app.updater.settings import USER, REPO, APP_NAME
 
 
-with open(os.path.join(os.path.dirname(__file__), 'main.md'), 'r') as f:
-    # search paths
-    soup = bs(f, 'html.parser')
-
+# vars
 paths = []
-
-for inc_tag in soup.find_all('include'):
-    path = inc_tag.get('path')
-    paths.append(path)
-
-# init stub
-with open('README.stub','w') as f:
-    f.write('')
-
-# # construct base
-for path in paths:
-    # template readme
-    with open(os.path.join(os.path.dirname(__file__), path), 'r') as f:
-        readme_stub = f.read()
-
-    with open('README.stub','a') as f:
-        f.write(readme_stub)
-
-# init md
-with open('README.md','w') as f:
-    f.write("")
-
 struct = {
     '{logo_name}': f'{APP_NAME} logo',
     '{app_name}': APP_NAME,
@@ -42,6 +17,29 @@ struct = {
     '{REPO}': REPO,
 }
 
+# init soup
+with open(os.path.join(os.path.dirname(__file__), 'main.md'), 'r') as f:
+    # search paths
+    soup = bs(f, 'html.parser')
+
+# init stub
+with open('README.stub','w') as f:
+    f.write('')
+# create stub
+for index, inc_tag in enumerate(soup.find_all('include')):
+    path = inc_tag.get('path')
+    # template readme
+    with open(os.path.join(os.path.dirname(__file__), path), 'r') as f:
+        readme_stub = f.read()
+    inc_tag.string = readme_stub
+soup.include.replaceWithChildren()
+# write out stub
+with open('README.stub','w') as f:
+    f.write(soup.text)
+
+# init md
+with open('README.md','w') as f:
+    f.write("")
 # template readme
 with open('README.stub') as f:
     readme = f.read()
