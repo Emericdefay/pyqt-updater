@@ -44,12 +44,9 @@ struct = {
 
 # template readme
 with open('README.stub') as f:
-    readme_stub = f.read()
+    readme = f.read()
 # put potential variables
 for key, value in struct.items():
-
-    # simple replacement, use whatever stand-in value is useful for you.
-    readme = readme_stub.replace(key, value)
-
+    readme = readme.replace(key, value)
     with open('README.md','w') as f:
         f.write(readme)
