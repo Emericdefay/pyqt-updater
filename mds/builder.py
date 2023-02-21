@@ -1,7 +1,11 @@
 from bs4 import BeautifulSoup as bs
 import os, sys
 
-from updater.settings import USER, REPO, APP_NAME
+sys.path.append(
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
+)
+
+from app.updater.settings import USER, REPO, APP_NAME
 
 
 with open(os.path.join(os.path.dirname(__file__), 'main.md'), 'r') as f:
