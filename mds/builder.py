@@ -36,18 +36,17 @@ with open('README.md','w') as f:
     f.write("")
 
 struct = {
-    '{logo_name}': f'{APP_NAME} Logo',
+    '{logo_name}': f'{APP_NAME} logo',
     '{app_name}': APP_NAME,
     '{USER}': USER,
     '{REPO}': REPO,
 }
 
+# template readme
+with open('README.stub') as f:
+    readme_stub = f.read()
 # put potential variables
 for key, value in struct.items():
-
-    # template readme
-    with open('README.stub') as f:
-        readme_stub = f.read()
 
     # simple replacement, use whatever stand-in value is useful for you.
     readme = readme_stub.replace(key, value)
