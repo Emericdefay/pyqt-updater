@@ -92,6 +92,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-MDS.txt
 
+      - name: Make Empty README
+        run: python mds/emptier.py
+
+      - name: Commit files
+        run: |
+          git config --local user.name "workflow"
+          git add README.md
+          git commit -m "[Workflow] - reset README"
+
       - name: Run the script
         run: python mds/builder.py
 
