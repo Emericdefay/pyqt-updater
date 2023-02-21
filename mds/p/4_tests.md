@@ -1,5 +1,3 @@
-## 🔧 Running the tests <a name = "tests"></a>
-
 Explain how to run the automated tests for this system.
 
 ### Break down into end to end tests
