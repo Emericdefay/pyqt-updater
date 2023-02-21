@@ -1,15 +1,15 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="./com/APP_NAME logo.png" alt="APP_NAME logo"></a>
+ <img width=200px height=200px src="./com/main logo.png" alt="main logo"></a>
 </p>
 
-<h3 align="center">APP_NAME</h3>
+<h3 align="center">main</h3>
 
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/USER/REPO.svg)](https://github.com/USER/REPO/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/USER/REPO.svg)](https://github.com/USER/REPO/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues/Emericdefay/dumb-app.svg)](https://github.com/Emericdefay/dumb-app/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Emericdefay/dumb-app.svg)](https://github.com/Emericdefay/dumb-app/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
@@ -132,8 +132,5 @@ Add additional notes about how to deploy this on a live system.
 - [Express](https://expressjs.com/) - Server Framework
 - [VueJs](https://vuejs.org/) - Web Framework
 - [NodeJs](https://nodejs.org/en/) - Server Environment
-
-## Authors 
-
-- [@USER](https://github.com/USER) - Idea & Initial work
+- [@Emericdefay](https://github.com/Emericdefay) - Idea & Initial work
 
