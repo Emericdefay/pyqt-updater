@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['..\\app\\launcher.py'],
+    ['app\\launcher.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -38,7 +38,6 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
-
 coll = COLLECT(
     exe,
     a.binaries,
