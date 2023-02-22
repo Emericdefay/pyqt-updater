@@ -41,7 +41,11 @@ launcher_a = Analysis(
     noarchive=False,
 )
 
-launcher_pyz = PYZ(launcher_a.pure, launcher_a.zipped_data, cipher=block_cipher)
+launcher_pyz = PYZ(
+    launcher_a.pure,
+    launcher_a.zipped_data,
+    cipher=block_cipher
+)
 
 launcher_exe = EXE(
     launcher_pyz,

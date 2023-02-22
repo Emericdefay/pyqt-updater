@@ -1,20 +1,20 @@
+import os
+import sys
+import time
 import logging
 from datetime import datetime
-import time
-import os
-import logging
-import sys
-from pathlib import Path
-from logging.handlers import TimedRotatingFileHandler
 
+from logging.handlers import TimedRotatingFileHandler
 from updater.settings import DEBUG
 
 
 def setup_logs():
     """
-    Configures logging for the application. Logs are saved in a 'logs' directory
-    with the filename format: 'YYYY-MM-DD_HHhMMmSSs.log'. The logging level is set
-    to 'DEBUG' if the global 'DEBUG' variable is set to True, or 'INFO' otherwise.
+    Configures logging for the application. Logs are saved in a 'logs'
+    directory with the filename format: 'YYYY-MM-DD_HHhMMmSSs.log'. The logging
+    level is set to 'DEBUG' if the global 'DEBUG' variable is set to True, or
+    'INFO' otherwise.
+    
     The logs are written to a file and to the standard output/error streams.
 
     Returns:
@@ -39,7 +39,9 @@ def setup_logs():
         format='%(asctime)s %(levelname)s %(funcName)s %(message)s'
     )
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    handler = TimedRotatingFileHandler(full_path, when="midnight", interval=1, encoding='utf8')
+    handler = TimedRotatingFileHandler(
+        full_path, when="midnight", interval=1, encoding='utf8'
+    )
     handler.suffix = "%Y-%m-%d"
     handler.setFormatter(formatter)
     logger = logging.getLogger()
@@ -50,23 +52,25 @@ def setup_logs():
 
 def log_exceptions(func):
     """
-    A decorator function that logs any exceptions that occur during the decorated function's
-    execution. The log message includes the function name, the elapsed time of the function
-    call, and any exception that was raised.
+    A decorator function that logs any exceptions that occur during the
+    decorated function's execution. The log message includes the function name,
+    the elapsed time of the function call, and any exception that was raised.
 
     Args:
         func (callable): The function being decorated.
 
     Returns:
-        callable: A wrapper function that logs any exceptions and re-raises them.
+        callable: A wrapper function that logs any exceptions and
+                  re-raises them.
     """
     def wrapper(*args, **kwargs):
         try:
             start_time = time.time()
             result = func(*args, **kwargs)
             end_time = time.time()
-            elapsed_time = end_time - start_time
-            logging.info(f"Call {func.__name__: <20}. Elapsed time: {elapsed_time:.2f} sec.")
+            elps_t = end_time - start_time
+            logging.info(
+                f"Call {func.__name__: <20}. Elapsed time: {elps_t:.2f} sec.")
             return result
         except Exception as e:
             logging.exception(f"{func.__name__}() Exception : {str(e)}")
@@ -77,14 +81,16 @@ def log_exceptions(func):
 class LoggerWriter:
     """
     A class that redirects standard output/error streams to the logging system.
-    It allows messages written to the standard output/error streams to be captured
-    and logged by the logging module.
+    It allows messages written to the standard output/error streams to be
+    captured and logged by the logging module.
 
     Args:
-        level (logging.Level): The logging level to use for the captured messages.
+        level (logging.Level): The logging level to use for the captured
+                               messages.
 
     Attributes:
-        level (logging.Level): The logging level to use for the captured messages.
+        level (logging.Level): The logging level to use for the captured
+                               messages.
 
     Methods:
         write(message): Writes a message to the logging system.

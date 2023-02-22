@@ -11,7 +11,17 @@ import logging
 import unittest
 
 try:
-    from updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
+    from updater.settings import (
+        USER,
+        REPO,
+        APP_NAME,
+        DEBUG,
+        WIDTH,
+        HEIGHT,
+        TAG_FRONT,
+        TAG_BACK,
+        UPD_HEX_C
+    )
     from updater.paths import APP_PATH, UPT_PATH
     from updater.spinner import DownloadProgressBar
     from updater.dialog import dialog_error
@@ -24,7 +34,16 @@ except ModuleNotFoundError:
     sys.path.append(
         os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
     )
-    from app.updater.settings import USER, REPO, APP_NAME, DEBUG, WIDTH, HEIGHT, TAG_FRONT, TAG_BACK, UPD_HEX_C
+    from app.updater.settings import (USER,
+    REPO,
+    APP_NAME,
+    DEBUG,
+    WIDTH,
+    HEIGHT,
+    TAG_FRONT,
+    TAG_BACK,
+    UPD_HEX_C
+    )
     from app.updater.paths import APP_PATH, UPT_PATH
     from app.updater.spinner import DownloadProgressBar
     from app.updater.dialog import dialog_error
@@ -40,10 +59,35 @@ my_queue = queue.Queue()
 
 
 def get_app_name():
+    """
+    Returns the name of the application.
+
+    Returns:
+        A string representing the name of the application.
+    """
     return APP_NAME
+
 
 @log_exceptions
 def load_json() -> Any:
+    """
+    This is a function that loads a JSON file from disk and returns its
+    content. The function is decorated with the @log_exceptions decorator,
+    which will log any exceptions that occur while the function is running.
+
+    The function first attempts to open the JSON file using a context manager
+    (with open(...) as f_json:) and load its content using the json.load()
+    method. If this operation fails with a FileNotFoundError, the function
+    calls the repair_update_json() function to create a new JSON file with
+    default settings, and then recursively calls itself to attempt to load the
+    newly created file.
+
+    Note that this recursion could potentially cause an infinite loop if the
+    repair_update_json() function is unable to create a valid JSON file for
+    some reason. A better approach might be to have a loop that tries to load
+    the file a certain number of times before giving up, and possibly showing
+    an error message to the user.
+    """
     try:
         with open(f"{UPT_PATH}") as f_json:
             data = json.load(f_json)
@@ -55,18 +99,24 @@ def load_json() -> Any:
 
 @log_exceptions
 def update_json(data: dict) -> None: 
+    """
+    The update_json function takes a dictionary as input and writes it to a
+    JSON file located at UPT_PATH with the contents of the input dictionary.
+    If there is an exception while writing the file, it will be logged using
+    the log_exceptions decorator.
+    """
     with open(f'{UPT_PATH}', 'w') as f:
         json.dump(data, f)
 
 
 @log_exceptions
 def update(url: str) -> None:
-    """Update the REPO project release
-
-    Args:
-        url (str): _description_
     """
-    
+    The update function is using tkinter library to create a progress bar and
+    download a file from a given url. During the download, it will display the
+    amount of bytes downloaded and the download speed. After the download is
+    completed, the tkinter window is destroyed.
+    """
     # Create Tk window
     root = tk.Tk()
     # Masquer la barre de titre
@@ -93,6 +143,32 @@ def update(url: str) -> None:
 
 @log_exceptions
 def version_check() -> None:
+    """
+    The version_check function checks if a new version of the application is
+    available on GitHub, and if so, downloads and installs it.
+
+    Here is a breakdown of what the function does:
+
+        - It loads the JSON parameters (branch and application version) using
+          the load_json function.
+        - It retrieves the latest version number available on GitHub by sending
+          a request to the corresponding page and parsing the URL. It also 
+          checks if the current version is outdated or if the application file 
+          is missing (in the latter case, it assumes that an update is 
+          required).
+        - It retrieves the version number (which is different from the 
+          application version number) by sending a request to a text file on 
+          GitHub.
+        - It constructs the update URL by combining the repository and version 
+          information obtained earlier.
+        - It enqueues an update task using the update function.
+        - It updates the JSON parameters to reflect the latest application 
+          version using the update_json function.
+
+    Overall, this function automates the update process by fetching the latest
+    version information and downloading the update from GitHub, and it uses the
+    update function to perform the actual download and installation.
+    """
     # Récupère les paramètres JSON
     data = load_json()
     BRANCH = data['BRANCH']
@@ -119,11 +195,14 @@ def version_check() -> None:
             logging.info(f"Update required : DEBUG MODE")
 
         # Vérifier si une mise à jour est disponible
-        version_url = f"https://raw.githubusercontent.com/{USER}/{REPO}/{BRANCH}/version.txt"
+        version_url = f"https://raw.githubusercontent.com/\
+                        {USER}/{REPO}/{BRANCH}/version.txt"
         version = requests.get(version_url).text
 
         # Update depuis GitHub
-        update_url = f"https://github.com/{USER}/{REPO}/releases/download/{TAG_FRONT}{version}{TAG_BACK}/{APP_NAME}.exe"
+        update_url = f"https://github.com/\
+                       {USER}/{REPO}/releases/download/\
+                       {TAG_FRONT}{version}{TAG_BACK}/{APP_NAME}.exe"
 
         try:
             my_queue.put(update(update_url))           
@@ -138,6 +217,17 @@ def version_check() -> None:
 
 @log_exceptions
 def main() -> None:
+    """
+    The main function seems to be the entry point of the application.
+    
+    Here's what it does:
+
+        - It checks the JSON configuration file using load_json.
+        - It runs integrity tests on the updater using unittest. It raises an 
+          exception if the tests fail.
+        - It checks for an available update using version_check.
+        - It launches the updated application using subprocess.Popen.
+    """
     # check json
     load_json()
     # check updater integrity
