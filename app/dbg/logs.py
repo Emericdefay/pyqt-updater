@@ -11,6 +11,15 @@ from updater.settings import DEBUG
 
 
 def setup_logs():
+    """
+    Configures logging for the application. Logs are saved in a 'logs' directory
+    with the filename format: 'YYYY-MM-DD_HHhMMmSSs.log'. The logging level is set
+    to 'DEBUG' if the global 'DEBUG' variable is set to True, or 'INFO' otherwise.
+    The logs are written to a file and to the standard output/error streams.
+
+    Returns:
+        None
+    """
     level = None
     if DEBUG:
         level = logging.DEBUG
@@ -40,6 +49,17 @@ def setup_logs():
 
 
 def log_exceptions(func):
+    """
+    A decorator function that logs any exceptions that occur during the decorated function's
+    execution. The log message includes the function name, the elapsed time of the function
+    call, and any exception that was raised.
+
+    Args:
+        func (callable): The function being decorated.
+
+    Returns:
+        callable: A wrapper function that logs any exceptions and re-raises them.
+    """
     def wrapper(*args, **kwargs):
         try:
             start_time = time.time()
@@ -55,6 +75,21 @@ def log_exceptions(func):
 
 
 class LoggerWriter:
+    """
+    A class that redirects standard output/error streams to the logging system.
+    It allows messages written to the standard output/error streams to be captured
+    and logged by the logging module.
+
+    Args:
+        level (logging.Level): The logging level to use for the captured messages.
+
+    Attributes:
+        level (logging.Level): The logging level to use for the captured messages.
+
+    Methods:
+        write(message): Writes a message to the logging system.
+        flush(): Flushes the logger to ensure all messages have been processed.
+    """
     def __init__(self, level):
         # self.level is really like using log.debug(message)
         # at least in my case
